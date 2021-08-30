@@ -11,11 +11,13 @@ import java.util.Optional;
 
 import javax.annotation.Resource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import mx.tec.web.lab.mapper.ProductMapper;
 import mx.tec.web.lab.vo.ProductVO;
 import mx.tec.web.lab.repository.ProductRepository;
+import mx.tec.web.lab.service.CommentsService;
 
 /**
  * JPA Implementation for Product Data Access Object
@@ -31,10 +33,18 @@ public class ProductDAOJPAImpl implements ProductDAO {
 	@Resource
     private ProductMapper productMapper;	
 	
+	@Autowired
+	CommentsService commentService;
+	
 	/** {@inheritDoc} */
 	@Override
 	public List<ProductVO> findAll() {
-		return productMapper.convertToVOList(productRepository.findAll());
+		List<ProductVO> productList = productMapper.convertToVOList(productRepository.findAll());
+		for (ProductVO product: productList) {
+			product.setComments(commentService.getComments());
+		}
+		return productList;
+				
 	}
 
 	/** {@inheritDoc} */
