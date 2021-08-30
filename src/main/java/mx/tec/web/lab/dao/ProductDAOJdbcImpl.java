@@ -117,8 +117,11 @@ public class ProductDAOJdbcImpl implements ProductDAO {
 
 	@Override
 	public void remove(ProductVO existingProduct) {
-		// TODO Auto-generated method stub
+		String sql = "DELETE FROM Sku WHERE parentProduct_id = " + existingProduct.getId();
+		jdbcTemplate.update(sql);
 
+		sql = "DELETE FROM Product WHERE id = " + existingProduct.getId();
+		jdbcTemplate.update(sql);
 	}
 
 	@Override
